@@ -1,32 +1,30 @@
 import { Link } from 'react-router-dom';
 
-export function CountriesList(countries) {
+export function CountriesList({ countries }) {
   return (
-    <div className="container">
-      <div className="row">
-        <div
-          className="col-5"
-          style={{ overflow: 'scroll', maxHeight: '90vh' }}
-        >
-          <div className="list-group">
-            {countries.countries.map((currentFlag, id) => {
-              return (
-                <Link
-                  key={id}
-                  className="list-group-item list-group-item-action"
-                  to={`/${currentFlag.alpha3Code}`}
-                >
-                  <img
-                    src={`https://flagpedia.net/data/flags/icon/72x54/${currentFlag.alpha2Code.toLowerCase()}.png`}
-                    alt={currentFlag.name.official}
-                  />
-                  <p>{currentFlag.name.official}</p>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+    <div
+      className="col-5"
+      style={{ maxHeight: '90vh', overflow: 'scroll', textAlign: 'center' }}
+    >
+      {countries
+        .map((currentCountry) => {
+          return (
+            <div className="list-group" key={currentCountry.alpha2Code}>
+              <Link
+                className="list-group-item list-group-item-action"
+                to={`/${currentCountry.alpha3Code}`}
+              >
+                <img
+                  src={`https://flagpedia.net/data/flags/icon/72x54/${currentCountry.alpha2Code.toLowerCase()}.png`}
+                  alt={currentCountry.name.official}
+                  style={{ width: '50px' }}
+                />
+                <p>{currentCountry.name.common}</p>
+              </Link>
+            </div>
+          );
+        })
+        .sort((a, b) => a.key.localeCompare(b.key))}
     </div>
   );
 }

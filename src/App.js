@@ -1,26 +1,40 @@
-import { useState } from 'react';
-import './App.css';
-import countriesList from './countries.json';
-import { CountryDetails } from './components/CountryDetails';
-import { Routes, Route } from 'react-router-dom';
-import { Navbar } from './components/Navbar';
+import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { CountriesList } from './components/CountriesList';
+import { CountryDetails } from './components/CountryDetails';
+import { Navbar } from './components/Navbar';
+import axios from 'axios';
+
+// import countries from './countries.json';
 
 export function App() {
-  const [countries, setCountries] = useState(countriesList);
+  const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  return (
-    <div className="App">
+  useEffect(() => {
+    async function fetchList() {
+      const response = await axios.get(
+        'https://ih-countries-api.herokuapp.com/countries'
+      );
+      setLoading(false);
+      setCountries(response.data);
+    }
+    fetchList();
+  }, []);
+
+  return loading ? (
+    <div className="spinner-border text-danger" role="status"></div>
+  ) : (
+    <>
       <Navbar />
-      <div className="display">
-        <CountriesList countries={countries} setCountries={setCountries} />
-        <Routes>
-          <Route
-            path="/:id"
-            element={<CountryDetails countries={countries} />}
-          />
-        </Routes>
+      <div className="container">
+        <div className="row">
+          <CountriesList countries={countries} />
+          <Routes>
+            <Route path="/:alpha3Code" element={<CountryDetails />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

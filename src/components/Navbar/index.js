@@ -1,11 +1,13 @@
+import { Link } from 'react-router-dom';
+
 export function Navbar() {
   return (
-    <nav className="navbar navbar-dark bg-primary mb-3">
+    <div className="navbar">
       <div className="container">
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           LAB - WikiCountries
-        </a>
+        </Link>
       </div>
-    </nav>
+    </div>
   );
 }
